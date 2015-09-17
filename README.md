@@ -20,5 +20,5 @@ The script will pull a fresh version of the OUI list from <a href='http://standa
 In order to use this script, please keep the file: *vendors.txt* in the same folder as the script.  This file contains the relationships between certain MAC addresses and vendors.
 
 ## Changelog
-[August 3, 2015] [v0.1] - Script created
+[August 3, 2015] [v0.1] - Script created<br>
 [September 16, 2015] [v0.2] - Added ability to update the OUI list.  Various bug fixes.

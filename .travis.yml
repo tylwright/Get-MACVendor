@@ -9,8 +9,10 @@ matrix:
         - brew cask install powershell
   fast_finish: true
 
-install:
-  - pwsh Install-Module -Name Pester -Force -SkipPublisherCheck
-
 script:
-  - pwsh Invoke-Pester
+- |
+  pwsh <(cat <<-EOF
+  Install-Module -Name Pester -Force -SkipPublisherCheck |
+  Invoke-Pester
+  EOF
+  ) -c 'Script' > /dev/null

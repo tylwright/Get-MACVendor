@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [0.3] - 2018-05-12
 ### Added
 - Allow users to enter MAC w/out ':' or '-'
+- Added unit tests and Travis CI build
+- Added proper doc to module function
 
 ### Changed
 - Created an actual changelog
@@ -11,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Output is now '<name of vendor>' instead of 'The vendor is: <name of vendor>'
 - Changed output when updating vendor list to Write-Host instead of Write-Debug
 - Only allow one parameter at a time (-MAC or -Action)
+- Converted script into a module
 
 ## [0.2] - 2015-09-16
 ### Added

@@ -1,0 +1,16 @@
+language: generic
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode9.1
+      before_install:
+        - brew tap caskroom/cask
+        - brew cask install powershell
+  fast_finish: true
+
+install:
+  - pwsh Install-Module -Name Pester -Force -SkipPublisherCheck
+
+script:
+  - pwsh Invoke-Pester

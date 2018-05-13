@@ -1,21 +1,21 @@
 ﻿#region Script Arguments
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName='MACProvided')]
 param
 (
-	[Parameter(Mandatory = $false,
-			   Position = 1,
+	[Parameter(Mandatory = $true,
+			   ParameterSetName = 'MACProvided',
 			   HelpMessage = 'MAC Address in any format')]
 	[ValidateNotNullOrEmpty()]
 	[string]$MAC,
+	[Parameter(Mandatory = $true,
+			   ParameterSetName = 'UpdateRequested',
+			   HelpMessage = 'Actions available: Update')]
 	[ValidateSet('update', IgnoreCase = $true)]
 	[string]$action
 )
 #endregion
 
 #region Variables
-# Set debug preference
-$DebugPreference = "Continue"
-
 # Default location for vendor list
 $vendorList = "$pwd/vendor.txt"
 #endregion
@@ -43,21 +43,21 @@ function Update-VendorList
 			Rename-Item -Path $vendorList "$vendorList.old"
 		}
 		# Download vendor list
-		Write-Debug "Attempting to download a new OUI list"
+		Write-Host "Attempting to download a new OUI list..."
 		$webclient = New-Object System.Net.WebClient
 		$url = "http://standards-oui.ieee.org/oui.txt"
 		$webclient.DownloadFile($url, $vendorList)
 		# If vendor list downloaded successfully, delete the "old" copy
 		if (Test-Path $vendorList)
 		{
-			Write-Debug "Vendor list has been updated - deleting older version"
+			Write-Host "Vendor list has been updated - deleting older version."
 			Remove-Item -Path "$vendorList.old"
 		}
 	}
 	Catch
 	{
-		Write-Debug "Unable to download the latest OUI list from http://standards-oui.ieee.org"
-		Write-Debug "Reverting to previous OUI list"
+		Write-Host "Unable to download the latest OUI list from http://standards-oui.ieee.org"
+		Write-Host "Reverting to previous OUI list..."
 		# Rename the "old" copy back to the default name.
 		# We want to be able to use this script even if our update function fails.
 		Rename-Item "$vendorList.old" $vendorList
@@ -87,12 +87,18 @@ function Clean-MAC
 	
 	# Change : to -
 	$MAC = $MAC -replace ":", "-"
+
+	if ($MAC -notlike '*-*')
+	{
+		$MAC = ($MAC -replace '(..)','$1-').trim('-')
+	}
 	
 	# Only use the first 00:00:00 character
 	if ($MAC.length -gt 7)
 	{
 		$MAC = $MAC.Substring(0, 8)
 	}
+	
 	return $MAC
 }
 
@@ -153,15 +159,7 @@ else
 	# If there is a vendor, output the name
 	if ($vendor)
 	{
-		# If the vendor name ends with a period (ex. inc.), don't print an additional "."
-		if (($vendor.Substring($vendor.Length - 1), 1) -eq ".")
-		{
-			Write-Output "The vendor is: $vendor"
-		}
-		else
-		{
-			Write-Output "The vendor is: $vendor."
-		}
+		Write-Output $vendor
 	}
 	else
 	{

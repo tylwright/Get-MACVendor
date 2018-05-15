@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [0.4] - 2018-05-15
+### Added
+- New feature!  Get-MACVendor -Vendor <vendor name> to return MACs registered to given vendor
+
 ### Changed
 - Configuring Travis CI build to align with Pester's Travis CI config
 

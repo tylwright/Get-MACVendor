@@ -4,9 +4,14 @@
 
 	.Synopsis
 	Shows the vendor who owns a MAC address prefix
+	or
+	Shows the MAC addresses that are registered to a vendor
 
 	.Parameter MAC
 	MAC address you wish to lookup the vendor of
+
+	.Parameter Vendor
+	Vendor you wish to lookup the MACs of
 
 	.Parameter Action
 	An action you wish to perform
@@ -24,6 +29,10 @@
 	Get-MACVendor -MAC 00:12:23
 	or
 	Get-MACVendor -MAC 00-12-23
+
+	.Example
+	# Display the MAC addresses registered to a certain vendor
+	Get-MACVendor -Vendor Dell
 #>
 
 function Get-MACVendor 
@@ -37,6 +46,11 @@ function Get-MACVendor
 				HelpMessage = 'MAC Address in any format')]
 		[ValidateNotNullOrEmpty()]
 		[string]$MAC,
+		[Parameter(Mandatory = $true,
+				ParameterSetName = 'VendorProvided',
+				HelpMessage = 'Vendor/manufacturer')]
+		[ValidateNotNullOrEmpty()]
+		[string]$vendor,
 		[Parameter(Mandatory = $true,
 				ParameterSetName = 'UpdateRequested',
 				HelpMessage = 'Actions available: Update')]
@@ -169,6 +183,52 @@ function Get-MACVendor
 			}
 		}
 	}
+
+<#
+		.SYNOPSIS
+			Finds the MAC addresses registered to the given vendor
+		
+		.DESCRIPTION
+			Searches for the given vendor in the OUI list and returns the MAC(s) associated with it
+		
+		.PARAMETER vendor
+			Provide a vendor's name
+	#>
+	function Get-MACs
+	{
+		[CmdletBinding()]
+		param
+		(
+			[Parameter(Mandatory = $true,
+					HelpMessage = 'Provide a vendor/manufacturer')]
+			[ValidateNotNullOrEmpty()]
+			[string]$vendor
+		)
+		
+		Process
+		{
+			Try
+			{
+				$output = Select-String -Path $vendorList -pattern $vendor | Select-String -pattern "(hex)" | Select-Object line -ExpandProperty line
+				$num_results = $output | Measure-Object
+				$num_results = $num_results.count
+				if ($num_results -eq 1)
+				{
+					$term = "result"
+				}
+				else
+				{
+					$term = "results"
+				}
+				$output = @("$num_results $term`r`n") + $output
+				return $output
+			}
+			Catch
+			{
+				Write-Warning "Vendor/manufacturer was not found"
+			}
+		}
+	}
 	#endregion
 
 	#region Main Program
@@ -177,7 +237,7 @@ function Get-MACVendor
 	{
 		Update-VendorList
 	}
-	else
+	elseif ($MAC)
 	{
 		# Clean and format the given MAC address
 		$cleanedMAC = Clean-MAC -MAC $MAC
@@ -194,6 +254,21 @@ function Get-MACVendor
 		{
 			Write-Output "Unable to find the vendor of $MAC."
 		}
+	}
+	elseif ($vendor)
+	{		
+			# Get the MAC address(es) pertaining to a vendor
+			$addresses = Get-MACs -Vendor $vendor
+			
+			# If there are MACs, output them
+			if ($addresses)
+			{
+				Write-Output $addresses
+			}
+			else
+			{
+				Write-Output "Unable to find any MACs registered to $vendor."
+			}
 	}
 	#endregion
 	Export-ModuleMember -Function Get-MACVendor

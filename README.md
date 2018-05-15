@@ -7,16 +7,21 @@ This PowerShell module searches the IEEE's database of vendors/MAC addresses to 
 ## How to use
 ```
 Import-Module ./Get-MACVendor.psm1
+```
 
+```
 Get-MACVendor -MAC 00:12:23
 Get-MACVendor -MAC 00-12-23
 Get-MACVendor -MAC 001223
 Get-MACVendor -MAC 00:12:23:45:54:32
+```
+The script will output: *Pixim*
 
+```
 Get-MACVendor -Vendor Dell
 Get-MACVendor -Vendor iRobot
 ```
-The script will output: *Pixim*
+The script will output a list of MACs.
 
 ## Downloading/Updating the OUI list
 ```

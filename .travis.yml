@@ -10,9 +10,5 @@ matrix:
   fast_finish: true
 
 script:
-- |
-  pwsh <(cat <<-EOF
-  Install-Module -Name Pester -Force -SkipPublisherCheck |
-  Invoke-Pester
-  EOF
-  ) -c 'Script' > /dev/null
+  - pwsh -c 'Install-Module -Name Pester -Force -SkipPublisherCheck'
+  - pwsh -c 'Invoke-Pester -EnableExit'

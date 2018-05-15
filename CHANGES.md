@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.4] - 2018-05-15
+### Changed
+- Configuring Travis CI build to align with Pester's Travis CI config
+
 ## [0.3] - 2018-05-12
 ### Added
 - Allow users to enter MAC w/out ':' or '-'

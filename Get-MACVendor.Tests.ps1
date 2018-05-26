@@ -27,12 +27,12 @@ Describe "Get-MACVendor -Vendor" {
     Context "Check acceptable inputs and returned results" {
         It "Allows iRobot and returns one result" {
             $results = Get-MACVendor -Vendor iRobot
-            $results | Should -Contain "1 result`r`n"
+            $results | Should -Contain "1 result"
             $results | Out-String | Should -BeLike "*50-14-79*"
         }
         It "Allows Dell and returns many results" {
             $results = Get-MACVendor -Vendor Dell
-            $results | Out-String | Should -BeLike "*results`r`n*"
+            $results | Out-String | Should -BeLike "*results*"
             $results | Out-String | Should -BeLike "*EC-F4-BB*"
         }
     }

@@ -180,6 +180,7 @@ function Get-MACVendor
 			Catch
 			{
 				Write-Warning "MAC address was not found"
+				return false
 			}
 		}
 	}
@@ -220,8 +221,20 @@ function Get-MACVendor
 				{
 					$term = "results"
 				}
-				$output = @("$num_results $term`r`n") + $output
-				return $output
+				$array_of_objects = @()
+				$num = @("$num_results $term")
+
+				foreach ($line in $output)
+				{
+					$prefix,$vendor = $line.split('(hex)')
+					$vendor = $vendor.replace('(hex)','')
+					$object = New-Object PSObject
+					Add-Member -InputObject $object -MemberType NoteProperty -Name "MAC Prefix" -Value $prefix
+					Add-Member -InputObject $object -MemberType NoteProperty -Name Vendor -Value $vendor.trim()
+					$array_of_objects += $object
+				}
+				
+				return $array_of_objects,$num
 			}
 			Catch
 			{
@@ -243,12 +256,12 @@ function Get-MACVendor
 		$cleanedMAC = Clean-MAC -MAC $MAC
 		
 		# Get the vendor of the MAC address
-		$vendor = Get-Vendor -MAC $cleanedMAC
+		$returnedVendor = Get-Vendor -MAC $cleanedMAC
 		
 		# If there is a vendor, output the name
-		if ($vendor)
+		if ($returnedVendor)
 		{
-			Write-Output $vendor
+			Write-Output $returnedVendor
 		}
 		else
 		{
@@ -258,12 +271,13 @@ function Get-MACVendor
 	elseif ($vendor)
 	{		
 			# Get the MAC address(es) pertaining to a vendor
-			$addresses = Get-MACs -Vendor $vendor
+			$addresses,$num = Get-MACs -Vendor $vendor
 			
 			# If there are MACs, output them
 			if ($addresses)
 			{
-				Write-Output $addresses
+				$addresses | Sort-Object -Property Vendor | Format-Table -Property "MAC Prefix", Vendor -AutoSize -GroupBy Vendor
+				Write-Output $num
 			}
 			else
 			{

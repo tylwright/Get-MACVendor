@@ -42,13 +42,14 @@ MAC Prefix  Vendor
 ```
 Get-MACVendor -Vendor Sonos
 ```
-*Output (shortened for space):*
+*Output:*
 ```
 Vendor: SONOS Co., Ltd.
 
 MAC Prefix  Vendor
 ----------  ------
 00-04-3C    SONOS Co., Ltd.
+
 
 Vendor: Sonos, Inc.
 
@@ -57,6 +58,18 @@ MAC Prefix  Vendor
 5C-AA-FD    Sonos, Inc.
 00-0E-58    Sonos, Inc.
 94-9F-3E    Sonos, Inc.
+B8-E9-37    Sonos, Inc.
+78-28-CA    Sonos, Inc.
+34-7E-5C    Sonos, Inc.
+
+
+Vendor: SonoSite, Inc.
+
+MAC Prefix  Vendor
+----------  ------
+00-08-FB    SonoSite, Inc.
+
+8 results
 ```
 
 ### Downloading/Updating the OUI list

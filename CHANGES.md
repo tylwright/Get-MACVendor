@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.5] - 2018-05-25
+### Changed
+- Get-MACVendor -Vendor <vendor name> now returns a nice table!
+-- Table is grouped by vendor name (ex. MACs pertaining to Dell and Dell Inc. will be returned but grouped into separate tables.)
+- Readme updated to show actual output of commands
+
 ## [0.4] - 2018-05-15
 ### Added
 - New feature!  Get-MACVendor -Vendor <vendor name> to return MACs registered to given vendor

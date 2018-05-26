@@ -180,6 +180,7 @@ function Get-MACVendor
 			Catch
 			{
 				Write-Warning "MAC address was not found"
+				return false
 			}
 		}
 	}
@@ -255,12 +256,12 @@ function Get-MACVendor
 		$cleanedMAC = Clean-MAC -MAC $MAC
 		
 		# Get the vendor of the MAC address
-		$vendor = Get-Vendor -MAC $cleanedMAC
+		$returnedVendor = Get-Vendor -MAC $cleanedMAC
 		
 		# If there is a vendor, output the name
-		if ($vendor)
+		if ($returnedVendor)
 		{
-			Write-Output $vendor
+			Write-Output $returnedVendor
 		}
 		else
 		{
@@ -275,8 +276,7 @@ function Get-MACVendor
 			# If there are MACs, output them
 			if ($addresses)
 			{
-				Write-Output $addresses
-				Write-Output "`r`n"
+				$addresses | Sort-Object -Property Vendor | Format-Table -Property "MAC Prefix", Vendor -AutoSize -GroupBy Vendor
 				Write-Output $num
 			}
 			else

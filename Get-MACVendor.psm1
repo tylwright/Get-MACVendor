@@ -226,7 +226,7 @@ function Get-MACVendor
 
 				foreach ($line in $output)
 				{
-					$prefix,$vendor = $line.split('(hex)')
+					$prefix,$vendor = $line.split("   ")
 					$vendor = $vendor.replace('(hex)','')
 					$object = New-Object PSObject
 					Add-Member -InputObject $object -MemberType NoteProperty -Name "MAC Prefix" -Value $prefix

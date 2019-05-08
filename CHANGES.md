@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.6] - 2019-05-07
+### Changed
+- #3 (Bug): Vendors with "," in their name weren't being returned correctly
+
 ## [0.5] - 2018-05-25
 ### Changed
 - Get-MACVendor -Vendor <vendor name> now returns a nice table!

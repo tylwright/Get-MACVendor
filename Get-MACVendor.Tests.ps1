@@ -15,6 +15,9 @@ Describe "Get-MACVendor -MAC" {
         It "Allows 001223444444 and returns Pixim" {
             Get-MACVendor -MAC 001223444444 | Should -Be 'Pixim'
         }
+        It "#3 (Bug): VMware, Inc. displayed properly" {
+            Get-MACVendor -MAC 005056 | Should -Be 'VMware, Inc.'
+        }
     }
     Context "Check unacceptable inputs" {
         It "Does not allow 0012" {
@@ -34,6 +37,10 @@ Describe "Get-MACVendor -Vendor" {
             $results = Get-MACVendor -Vendor Dell
             $results | Out-String | Should -BeLike "*results*"
             $results | Out-String | Should -BeLike "*EC-F4-BB*"
+        }
+        It "#3 (Bug): VMware, Inc. displayed properly" {
+            $results = Get-MACVendor -Vendor VMware
+            $results | Out-String | Should -BeLike "*VMware, Inc.*"
         }
     }
 }
